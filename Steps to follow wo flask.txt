@@ -1,0 +1,30 @@
+
+# These are the steps without flask
+
+pip install -r requirements.txt
+
+!python ingest.py
+
+pip3 install python-dotenv urllib3 chardet xformers pysqlite3-binary transformers accelerate scipy sentence_transformers flask --ignore-installed blinker==1.4
+
+pip install --upgrade langchain
+
+# pip install -qU \
+    #transformers==4.31.0 \
+    #accelerate==0.21.0 \
+    #einops==0.6.1 \
+    #langchain==0.0.240 \
+    #xformers==0.0.20 \
+   # bitsandbytes==0.41.0
+ 
+
+pip install -qU transformers==4.31.0 accelerate==0.21.0 einops==0.6.1 langchain==0.0.240 xformers==0.0.20 bitsandbytes==0.41.0
+
+python chat.py
+
+
+
+###after running the app.py 
+pip uninstall psutil
+pip install --upgrade psutil
+
