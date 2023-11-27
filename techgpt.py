@@ -182,8 +182,7 @@ def run_model(query, model_app):
     B_SYS, E_SYS = "<<SYS>>\n", "\n<</SYS>>\n\n"
 
     sys_msg = B_SYS + """
-    Please assume the persona of a Software engineer with in-depth expertise in the field of Cloud Computing.
-     Provide detailed, step-by-step explanations for any technical questions or problem-solving tasks
+    Respond as an Expert Injection mould design engineer
     
     """ + E_SYS
     new_prompt = agent.agent.create_prompt(
@@ -192,7 +191,7 @@ def run_model(query, model_app):
     )
     agent.agent.llm_chain.prompt = new_prompt
 
-    instruction = B_INST + " Please assume the persona of a Software engineer with in-depth expertise in the field of Cloud Computing. Provide detailed, step-by-step explanations for any technical questions or problem-solving tasks " + E_INST
+    instruction = B_INST + " Respond as an Expert Injection mould design engineer " + E_INST
     human_msg = instruction + "\nUser: {input}"
 
     agent.agent.llm_chain.prompt.messages[2].prompt.template = human_msg
