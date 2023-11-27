@@ -229,6 +229,7 @@ def run_model(query, model_app):
          )
         print("this is open ai response", response.choices[0].message.content)
         
+        
         # model_name = "gpt-3.5-turbo"
         # llm_open = ChatOpenAI(model_name=model_name)
         # retrieval_chain_open = RetrievalQA.from_chain_type(llm=OpenAI(), chain_type='stuff', retriever=retriever, return_source_documents=True)
