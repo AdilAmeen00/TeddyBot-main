@@ -75,6 +75,8 @@
             flex-grow: 1;
             padding: 8px;
             box-sizing: border-box;
+/*             changed here */
+            text-align: center;
             margin: 10px 20px 10px 0px;
             border-radius: 4px;
             border: 1px solid #595758;
@@ -135,6 +137,7 @@
             align-items: flex-start;
             flex-direction: column;
             opacity: 90%;
+            white-space: pre-wrap;
         }
 
         .ai-message span {
@@ -187,9 +190,10 @@
         <input id="input" class="message-input" type="text" placeholder="Type your query here. For eg. What is Athena?"
             onkeydown="if(event.keyCode==13)sendMessage()">
         <select id="select-model"  name="modal" aria-placeholder="Select the model">
-            <option value="PrivateLLM">PrivateLLM</option>
+            <option value="Thought">Thoughtful AI</option>
             <option value="ChatGPT">ChatGPT</option>
             <option value="BedRock">BedRock</option>
+            <option value="RAG">Augmented AI</option>
         </select>
     </div>
     </div>
