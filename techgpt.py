@@ -111,12 +111,12 @@ def run_model(query, model_app):
     parser = OutputParser()
 
     # Set quantization configuration to load large model with less GPU memory  - Cannot use quantization in Windows
-    bnb_config = transformers.BitsAndBytesConfig(
-        load_in_4bit=True,
-        bnb_4bit_quant_type='nf4',
-        bnb_4bit_use_double_quant=True,
-        bnb_4bit_compute_dtype=bfloat16
-    )
+    # bnb_config = transformers.BitsAndBytesConfig(
+    #     load_in_4bit=True,
+    #     bnb_4bit_quant_type='nf4',
+    #     bnb_4bit_use_double_quant=True,
+    #     bnb_4bit_compute_dtype=bfloat16
+    # )
 
     # Initialize model configuration and model
     hf_token = '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'
@@ -125,7 +125,7 @@ def run_model(query, model_app):
         model_id,
         trust_remote_code=True,
         config=model_config,
-        quantization_config=bnb_config,
+        # quantization_config=bnb_config,
         device_map='auto',
         use_auth_token=hf_token
     )
@@ -206,7 +206,7 @@ def run_model(query, model_app):
 
     # for openai
 
-    os.environ["OPENAI_API_KEY"] = "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"
+    os.environ["OPENAI_API_KEY"] = ""
 
 
     model_name = "gpt-3.5-turbo"
