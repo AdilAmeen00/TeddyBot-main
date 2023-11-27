@@ -205,14 +205,7 @@ def run_model(query, model_app):
 
     # for openai
 
-    os.environ["OPENAI_API_KEY"] = ""
-
-
-    model_name = "gpt-3.5-turbo"
-    llm_open = ChatOpenAI(model_name=model_name)
-
-    retrieval_chain_open = RetrievalQA.from_chain_type(llm=OpenAI(), chain_type='stuff', retriever=retriever, return_source_documents=True)
-
+   
     # from sentence_transformers import SentenceTransformer
 
     # model1 = SentenceTransformer('paraphrase-MiniLM-L3-v2')
@@ -233,6 +226,12 @@ def run_model(query, model_app):
         # rag_answer = rag_pipeline(query)
         # agent_query = rag_answer['result']
         # return agent_query
+        os.environ["OPENAI_API_KEY"] = ""
+        model_name = "gpt-3.5-turbo"
+        llm_open = ChatOpenAI(model_name=model_name)
+    
+        retrieval_chain_open = RetrievalQA.from_chain_type(llm=OpenAI(), chain_type='stuff', retriever=retriever, return_source_documents=True)
+
         aa = retrieval_chain_open({"query": query})
         print("This is aa output", aa)
         return aa['result']
