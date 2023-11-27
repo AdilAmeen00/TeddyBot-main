@@ -202,18 +202,12 @@ def run_model(query, model_app):
     llm=llm, chain_type='stuff',
     retriever=retriever, return_source_documents= not args.hide_source
     )
-
-    # for openai
-
-   
     # from sentence_transformers import SentenceTransformer
-
     # model1 = SentenceTransformer('paraphrase-MiniLM-L3-v2')
     # embedding1 = model1.encode("this is sentence").tolist()
-
     # model_app = 'Unstructured Text'
 
-    if model_app == 'Thought': # change this to Vector search
+    if model_app == 'Thought':
         # docs = db.similarity_search(query)
         # # print("The answer based on Text matching search is \n", docs[0].page_content)
         # return docs[0].page_content
@@ -222,29 +216,21 @@ def run_model(query, model_app):
         combined_answer = agent("Answer the question with the context provided" + agent_query)
         print(combined_answer['output'])
         return combined_answer['output']
-    elif model_app == 'ChatGPT':  # change this to Vector and Rag search
-        # rag_answer = rag_pipeline(query)
-        # agent_query = rag_answer['result']
-        # return agent_query
+    elif model_app == 'ChatGPT':
         os.environ["OPENAI_API_KEY"] = ""
         model_name = "gpt-3.5-turbo"
         llm_open = ChatOpenAI(model_name=model_name)
-    
         retrieval_chain_open = RetrievalQA.from_chain_type(llm=OpenAI(), chain_type='stuff', retriever=retriever, return_source_documents=True)
-
         aa = retrieval_chain_open({"query": query})
         print("This is aa output", aa)
         return aa['result']
 
-    elif model_app == 'BedRock':   # change this to Cognitive search
-        # rag_answer = rag_pipeline(query)
-        # agent_query = rag_answer['result']
-        # combined_answer = agent("Answer the question with the context provided" + agent_query)
-        # print(combined_answer['output'])
-        # return combined_answer['output']
+    elif model_app == 'BedRock':   
         return "Bedrock not implemented yet"
     elif model_app == 'RAG':  
-        return "RAG not implemented yet"
+        rag_answer = rag_pipeline(query)
+        agent_query = rag_answer['result']
+        return agent_query
     else:
         return "Invalid model_app value"
 
