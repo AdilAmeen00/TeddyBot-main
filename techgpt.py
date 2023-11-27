@@ -213,7 +213,7 @@ def run_model(query, model_app):
 
     # model_app = 'Unstructured Text'
 
-    if model_app == 'PrivateLLM': # change this to Vector search
+    if model_app == 'Thought': # change this to Vector search
         # docs = db.similarity_search(query)
         # # print("The answer based on Text matching search is \n", docs[0].page_content)
         # return docs[0].page_content
@@ -242,7 +242,9 @@ def run_model(query, model_app):
         # combined_answer = agent("Answer the question with the context provided" + agent_query)
         # print(combined_answer['output'])
         # return combined_answer['output']
-        return "Not implemented yet"
+        return "Bedrock not implemented yet"
+     elif model_app == 'RAG':  
+        return "RAG not implemented yet"
     else:
         return "Invalid model_app value"
 
