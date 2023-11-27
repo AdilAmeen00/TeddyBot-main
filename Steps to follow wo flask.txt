@@ -3,6 +3,8 @@
 
 pip install -r requirements.txt
 
+rename example.env to .env
+
 !python ingest.py
 
 pip3 install python-dotenv urllib3 chardet xformers pysqlite3-binary transformers accelerate scipy sentence_transformers flask --ignore-installed blinker==1.4
