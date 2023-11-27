@@ -198,20 +198,20 @@ def run_model(query, model_app):
     agent.agent.llm_chain.prompt.messages[2].prompt.template = human_msg
     # agent.agent.llm_chain.prompt
     os.environ["OPENAI_API_KEY"] = "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"
-    #----
-    from openai import OpenAI
-    client = OpenAI()
+    # #----
+    # from openai import OpenAI
+    # client = OpenAI()
     
-    completion = client.chat.completions.create(
-      model="gpt-3.5-turbo",
-      messages=[
-        {"role": "system", "content": "You are a poetic assistant, skilled in explaining complex programming concepts with creative flair."},
-        {"role": "user", "content": "Compose a poem that explains the concept of recursion in programming."}
-      ]
-    )
+    # completion = client.chat.completions.create(
+    #   model="gpt-3.5-turbo",
+    #   messages=[
+    #     {"role": "system", "content": "You are a poetic assistant, skilled in explaining complex programming concepts with creative flair."},
+    #     {"role": "user", "content": "Compose a poem that explains the concept of recursion in programming."}
+    #   ]
+    # )
 
-    print(completion.choices[0].message)
-    #---------
+    # print(completion.choices[0].message)
+    # #---------
     rag_pipeline = RetrievalQA.from_chain_type(
     llm=llm, chain_type='stuff',
     retriever=retriever, return_source_documents= not args.hide_source
@@ -232,25 +232,24 @@ def run_model(query, model_app):
         print(combined_answer['output'])
         return combined_answer['output']
     elif model_app == 'ChatGPT':
-        from openai import OpenAI
-        client = OpenAI()
-        os.environ["OPENAI_API_KEY"] = "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"
-        response = client.chat.completions.create(
-          model="gpt-4",
-          response_format={ "type": "json_object" },
-          messages=[
-            {"role": "system", "content": "You are a Expert Injection Mold Design Engineer who answers all the queries in a very technically detailed manner. Your answer is neatly structured in paragraphs"},
-            {"role": "user", "content": "What is Injection Mold design engineer ?"}
-            ]
-         )
-        print("this is open ai response", response.choices[0].message.content)
+        # from openai import OpenAI
+        # client = OpenAI()
+        # os.environ["OPENAI_API_KEY"] = "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"
+        # response = client.chat.completions.create(
+        #   model="gpt-4",
+        #   response_format={ "type": "json_object" },
+        #   messages=[
+        #     {"role": "system", "content": "You are a Expert Injection Mold Design Engineer who answers all the queries in a very technically detailed manner. Your answer is neatly structured in paragraphs"},
+        #     {"role": "user", "content": "What is Injection Mold design engineer ?"}
+        #     ]
+        #  )
+        # print("this is open ai response", response.choices[0].message.content)
         
-        
-        # model_name = "gpt-3.5-turbo"
-        # llm_open = ChatOpenAI(model_name=model_name)
-        # retrieval_chain_open = RetrievalQA.from_chain_type(llm=OpenAI(), chain_type='stuff', retriever=retriever, return_source_documents=True)
-        # aa = retrieval_chain_open({"query": query})
-        # print("This is aa output", aa)
+        model_name = "gpt-4"
+        llm_open = ChatOpenAI(model_name=model_name)
+        retrieval_chain_open = RetrievalQA.from_chain_type(llm=OpenAI(), chain_type='stuff', retriever=retriever, return_source_documents=True)
+        aa = retrieval_chain_open({"query": query})
+        print("This is aa output", aa)
         return aa['result']
 
     elif model_app == 'BedRock':   
