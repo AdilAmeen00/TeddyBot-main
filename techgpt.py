@@ -221,9 +221,14 @@ def run_model(query, model_app):
     # model_app = 'Unstructured Text'
 
     if model_app == 'PrivateLLM': # change this to Vector search
-        docs = db.similarity_search(query)
-        # print("The answer based on Text matching search is \n", docs[0].page_content)
-        return docs[0].page_content
+        # docs = db.similarity_search(query)
+        # # print("The answer based on Text matching search is \n", docs[0].page_content)
+        # return docs[0].page_content
+        rag_answer = rag_pipeline(query)
+        agent_query = rag_answer['result']
+        combined_answer = agent("Answer the question with the context provided" + agent_query)
+        print(combined_answer['output'])
+        return combined_answer['output']
     elif model_app == 'ChatGPT':  # change this to Vector and Rag search
         # rag_answer = rag_pipeline(query)
         # agent_query = rag_answer['result']
@@ -233,11 +238,12 @@ def run_model(query, model_app):
         return aa['result']
 
     elif model_app == 'BedRock':   # change this to Cognitive search
-        rag_answer = rag_pipeline(query)
-        agent_query = rag_answer['result']
-        combined_answer = agent("Answer the question with the context provided" + agent_query)
-        print(combined_answer['output'])
-        return combined_answer['output']
+        # rag_answer = rag_pipeline(query)
+        # agent_query = rag_answer['result']
+        # combined_answer = agent("Answer the question with the context provided" + agent_query)
+        # print(combined_answer['output'])
+        # return combined_answer['output']
+        return "Not implemented yet"
     else:
         return "Invalid model_app value"
 
