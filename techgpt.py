@@ -150,7 +150,6 @@ def run_model(query, model_app):
 
 
     
-    
     args = parse_arguments()
     embeddings = HuggingFaceEmbeddings(model_name=embeddings_model_name)
     # print("DB work started")
