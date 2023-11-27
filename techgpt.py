@@ -177,24 +177,24 @@ def run_model(query, model_app):
     )
 
 
-    # setting system messages
-    B_INST, E_INST = "[INST]", "[/INST]"
-    B_SYS, E_SYS = "<<SYS>>\n", "\n<</SYS>>\n\n"
+    # # setting system messages
+    # B_INST, E_INST = "[INST]", "[/INST]"
+    # B_SYS, E_SYS = "<<SYS>>\n", "\n<</SYS>>\n\n"
 
-    sys_msg = B_SYS + """
-    Respond as an Expert Injection mould design engineer
+    # sys_msg = B_SYS + """
+    # Respond as an Expert Injection mould design engineer
     
-    """ + E_SYS
-    new_prompt = agent.agent.create_prompt(
-        system_message=sys_msg,
-        tools=tools
-    )
-    agent.agent.llm_chain.prompt = new_prompt
+    # """ + E_SYS
+    # new_prompt = agent.agent.create_prompt(
+    #     system_message=sys_msg,
+    #     tools=tools
+    # )
+    # agent.agent.llm_chain.prompt = new_prompt
 
-    instruction = B_INST + " Respond as an Expert Injection mould design engineer " + E_INST
-    human_msg = instruction + "\nUser: {input}"
+    # instruction = B_INST + " Respond as an Expert Injection mould design engineer " + E_INST
+    # human_msg = instruction + "\nUser: {input}"
 
-    agent.agent.llm_chain.prompt.messages[2].prompt.template = human_msg
+    # agent.agent.llm_chain.prompt.messages[2].prompt.template = human_msg
     # agent.agent.llm_chain.prompt
     os.environ["OPENAI_API_KEY"] = "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"
     # #----
@@ -233,7 +233,7 @@ def run_model(query, model_app):
     elif model_app == 'ChatGPT':
         # from openai import OpenAI
         # client = OpenAI()
-        # os.environ["OPENAI_API_KEY"] = "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"
+        os.environ["OPENAI_API_KEY"] = "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"
         # response = client.chat.completions.create(
         #   model="gpt-4",
         #   response_format={ "type": "json_object" },
@@ -243,7 +243,6 @@ def run_model(query, model_app):
         #     ]
         #  )
         # print("this is open ai response", response.choices[0].message.content)
-        
         model_name = "gpt-4"
         llm_open = ChatOpenAI(model_name=model_name)
         retrieval_chain_open = RetrievalQA.from_chain_type(llm=OpenAI(), chain_type='stuff', retriever=retriever, return_source_documents=True)
