@@ -198,6 +198,20 @@ def run_model(query, model_app):
     agent.agent.llm_chain.prompt.messages[2].prompt.template = human_msg
     # agent.agent.llm_chain.prompt
     os.environ["OPENAI_API_KEY"] = "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"
+
+    from openai import OpenAI
+    client = OpenAI()
+    
+    completion = client.chat.completions.create(
+      model="gpt-3.5-turbo",
+      messages=[
+        {"role": "system", "content": "You are a poetic assistant, skilled in explaining complex programming concepts with creative flair."},
+        {"role": "user", "content": "Compose a poem that explains the concept of recursion in programming."}
+      ]
+    )
+
+print(completion.choices[0].message)
+    
     rag_pipeline = RetrievalQA.from_chain_type(
     llm=llm, chain_type='stuff',
     retriever=retriever, return_source_documents= not args.hide_source
