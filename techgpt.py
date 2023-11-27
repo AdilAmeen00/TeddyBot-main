@@ -233,7 +233,7 @@ def run_model(query, model_app):
     elif model_app == 'ChatGPT':
         # from openai import OpenAI
         # client = OpenAI()
-        os.environ["OPENAI_API_KEY"] = "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"
+        os.environ["OPENAI_API_KEY"] = "sk"
         # response = client.chat.completions.create(
         #   model="gpt-4",
         #   response_format={ "type": "json_object" },
