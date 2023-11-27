@@ -68,7 +68,7 @@ def run_model(query, model_app):
     #  meta-llama/Llama-2-13b-chat-hf
     # meta-llama/Llama-2-7b-chat-hf
     # bigscience/bloom-560m
-    model_id = 'bigscience/bloom-560m'
+    model_id = 'meta-llama/Llama-2-13b-chat-hf'
     device = f'cuda:{cuda.current_device()}' if cuda.is_available() else 'cpu'
     def parse_arguments():
         parser = argparse.ArgumentParser(description='Ask questions to your documents without an internet connection, '
