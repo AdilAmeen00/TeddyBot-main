@@ -243,7 +243,7 @@ def run_model(query, model_app):
         # print(combined_answer['output'])
         # return combined_answer['output']
         return "Bedrock not implemented yet"
-     elif model_app == 'RAG':  
+    elif model_app == 'RAG':  
         return "RAG not implemented yet"
     else:
         return "Invalid model_app value"
