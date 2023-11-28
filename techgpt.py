@@ -42,6 +42,12 @@ from langchain.agents import initialize_agent
 import argparse
 from langchain.chat_models import ChatOpenAI
 from langchain.llms import OpenAI
+from langchain.prompts import PromptTemplate
+from langchain.agents import AgentExecutor
+from langchain.agents import initialize_agent, load_tools, AgentType
+from langchain.agents import initialize_agent, Tool
+from langchain.llms import OpenAI
+from langchain import Wikipedia
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 print("Device:", device)
@@ -141,8 +147,8 @@ def run_model(query, model_app):
         model=model, tokenizer=tokenizer,
         return_full_text=True,  # Langchain expects the full text
         task='text-generation',
-        temperature=0.0,  # 'Randomness' of outputs, 0.0 is the min and 1.0 the max
-        max_new_tokens=512,  # Max number of tokens to generate in the output
+        temperature=0.2,  # 'Randomness' of outputs, 0.0 is the min and 1.0 the max
+        max_new_tokens=712,  # Max number of tokens to generate in the output
         repetition_penalty=1.1  # Without this, output begins repeating
     )
 
@@ -156,25 +162,42 @@ def run_model(query, model_app):
     db = Chroma(persist_directory=persist_directory, embedding_function=embeddings, client_settings=CHROMA_SETTINGS)
     # print("db work ended")
     retriever = db.as_retriever()
+    print("Setting K value, initially 0")
+    retriever = db.as_retriever(search_kwargs={"k": 3})
+    print(retriever)
     # docs = db.similarity_search(query)
     callbacks = [] if args.mute_stream else [StreamingStdOutCallbackHandler()]
 
+    # Initialize an empty string to store the concatenated content
+    concatenated_content = ""
+    # Iterate through the documents and append their page_content to the string
+    for doc in docs:
+        concatenated_content += doc.page_content
+
+    # Setting prompt template
+    prompt_template = PromptTemplate.from_template(
+    """The context for the query is {context} 
+    Answer the user query with the above contex 
+    The user query is "{question}".
+    While answering the query you should assume yourself as a Expert Injection Module design engineer
+    who has in depth knowledge of the domain."""
+    )
 
     memory = ConversationBufferWindowMemory(
     memory_key="chat_history", k=5, return_messages=True, output_key="output"
     )
-    tools = load_tools(["llm-math"], llm=llm)
+    tools = load_tools(["wikipedia"], llm=llm)
 
     # initialize agent
-    agent = initialize_agent(
-        agent="chat-conversational-react-description",
-        tools=tools,
-        llm=llm,
-        verbose=False,
-        early_stopping_method="generate",
-        memory=memory,
-        agent_kwargs={"output_parser": parser}
-    )
+    # agent = initialize_agent(
+    #     agent="chat-conversational-react-description",
+    #     tools=tools,
+    #     llm=llm,
+    #     verbose=False,
+    #     early_stopping_method="generate",
+    #     memory=memory,
+    #     agent_kwargs={"output_parser": parser}
+    # )
 
 
     # # setting system messages
@@ -196,7 +219,7 @@ def run_model(query, model_app):
 
     # agent.agent.llm_chain.prompt.messages[2].prompt.template = human_msg
     # agent.agent.llm_chain.prompt
-    os.environ["OPENAI_API_KEY"] = "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"
+    os.environ["OPENAI_API_KEY"] = ""
     # #----
     # from openai import OpenAI
     # client = OpenAI()
@@ -222,34 +245,24 @@ def run_model(query, model_app):
  
     
     if model_app == 'Thought':
-        # docs = db.similarity_search(query)
-        # # print("The answer based on Text matching search is \n", docs[0].page_content)
-        # return docs[0].page_content
-        rag_answer = rag_pipeline(query)
-        agent_query = rag_answer['result']
-        combined_answer = agent("Answer the question with the context provided" + agent_query)
-        print(combined_answer['output'])
-        return combined_answer['output']
+        prompt_thought = prompt_template.format(context=concatenated_content, question=query)
+        thought_ans = rag_pipeline(prompt_thought)
+        return thought_ans['result']
     elif model_app == 'ChatGPT':
-        # from openai import OpenAI
-        # client = OpenAI()
-        os.environ["OPENAI_API_KEY"] = "sk"
-        # response = client.chat.completions.create(
-        #   model="gpt-4",
-        #   response_format={ "type": "json_object" },
-        #   messages=[
-        #     {"role": "system", "content": "You are a Expert Injection Mold Design Engineer who answers all the queries in a very technically detailed manner. Your answer is neatly structured in paragraphs"},
-        #     {"role": "user", "content": "What is Injection Mold design engineer ?"}
-        #     ]
-        #  )
-        # print("this is open ai response", response.choices[0].message.content)
-        model_name = "gpt-4"
-        llm_open = ChatOpenAI(model_name=model_name)
-        retrieval_chain_open = RetrievalQA.from_chain_type(llm=OpenAI(), chain_type='stuff', retriever=retriever, return_source_documents=True)
-        aa = retrieval_chain_open({"query": query})
-        print("This is aa output", aa)
-        return aa['result']
-
+        GPT_MODEL = "gpt-3.5-turbo"
+        response = openai.ChatCompletion.create(
+            messages=[
+                {'role': 'system', 'content': 'You answer questions as a Mechanical engineer.'},
+                {'role': 'user', 'content': query},
+            ],
+            model=GPT_MODEL,
+        s    temperature=0,
+        )
+        
+        print(response['choices'][0]['message']['content'])
+        open_response = response['choices'][0]['message']['content']
+        return open_response
+    
     elif model_app == 'BedRock':   
         return "Bedrock not implemented yet"
     elif model_app == 'RAG':  
