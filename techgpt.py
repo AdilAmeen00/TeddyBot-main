@@ -167,7 +167,7 @@ def run_model(query, model_app):
     print(retriever)
     # docs = db.similarity_search(query)
     callbacks = [] if args.mute_stream else [StreamingStdOutCallbackHandler()]
-
+    docs = db.similarity_search(query)
     # Initialize an empty string to store the concatenated content
     concatenated_content = ""
     # Iterate through the documents and append their page_content to the string
