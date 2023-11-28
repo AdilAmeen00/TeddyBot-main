@@ -49,5 +49,7 @@ __root__
 then install 
 - pip install openai==0.28.0
 
+pip install wikipedia
+
 
 
